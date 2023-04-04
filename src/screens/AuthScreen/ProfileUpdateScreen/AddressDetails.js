@@ -31,6 +31,8 @@ const AddressDetails = ({ navigation, route }) => {
     const [valueCountry, setValueCountry] = useState(null);
     const [isFocusCountry, setIsFocusCountry] = useState(false);
 
+    console.log(user_id, profile_update);
+
     useEffect(() => {
         const fetchDataAsync = async () => {
             setLoading(true)
@@ -38,7 +40,7 @@ const AddressDetails = ({ navigation, route }) => {
             const resultState = await GetStateList();
             const resultAddress = await AddressType();
             setLoading(false)
-            console.log(resultAddress.result);
+            // console.log(resultAddress.result);
             const isDataAddressList = [...resultAddress.result];
             const newArrayListAddress = isDataAddressList.map((item) => {
                 return { label: item.add_type, value: item.add_type_id }

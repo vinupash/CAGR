@@ -484,6 +484,114 @@ export const AddressProofType = async () => {
     }
 }
 
+export const GetUserDataApi = async (user_id) => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var formdata = new FormData();
+        formdata.append("cust_id", user_id);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "profile/userdetail", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const AMCMasterApi = async () => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        const response = await fetch(BASE_URL + "common/amcmaster", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+export const SchemeMasterApi = async () => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        const response = await fetch(BASE_URL + "common/schtype", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const FundDivOptionsApi = async () => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        const response = await fetch(BASE_URL + "common/funddivoption", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const GetAllInvestFundListApi = async (user_id) => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+        myHeaders.append("Cookie", "name=2; ses_cagr_f=1627b06f6026836c0b454f2f43e0357e");
+
+        var formdata = new FormData();
+        formdata.append("user_id", user_id);
+        formdata.append("fundhouse", "");
+        formdata.append("schemetype", "");
+        formdata.append("fundgrowth", "");
+        formdata.append("fundoption", "");
+        formdata.append("fundsrt", "");
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "invest/invest", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
 
 
 

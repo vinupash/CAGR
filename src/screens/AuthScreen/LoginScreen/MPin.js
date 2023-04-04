@@ -7,17 +7,18 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { MPinApi } from '../../../constants/AllApiCall';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../../../context/AuthContext';
 
 const MPin = ({ navigation, route }) => {
+    const { GetDataAfterMPinStatus } = useContext(AuthContext)
     const { user_id, user_name } = route.params;
     const [isLoading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isSuccessMessage, setSuccessMessage] = useState('');
     const [isVisible, setIsVisible] = useState(false);
     const [isMPin, setMPin] = useState('')
     const fadeAnim = useRef(new Animated.Value(0)).current;
-
-    console.log('isMPin--->', isMPin);
-    console.log('user_id--->', user_id, user_name);
 
     const handleErrorMsg = () => {
         Animated.timing(
@@ -33,21 +34,43 @@ const MPin = ({ navigation, route }) => {
         }, 3000);
     };
 
+    const handleSuccessMsg = () => {
+        Animated.timing(
+            fadeAnim,
+            {
+                toValue: isVisible ? 0 : 1,
+                duration: 500,
+                useNativeDriver: true
+            }
+        ).start();
+        setTimeout(() => {
+            setSuccessMessage('');
+        }, 3000);
+    };
+
     const userLogin = async () => {
         if (!isMPin) {
             handleErrorMsg()
             setErrorMessage('Please enter vaild M-Pin');
             return
         }
-
+        setLoading(true)
         const response = await MPinApi(user_id, isMPin);
+        setLoading(false)
         console.log('response--->', response);
         if (response.status === true) {
             alert(response.message);
-            // navigation.navigate('MPin', {
-            //     user_id: response.result.fldi_user_id,
-            //     user_name: response.result.fldv_first_name
-            // });
+            handleSuccessMsg()
+            setSuccessMessage(response.message)
+            AsyncStorage.setItem(
+                "userDataAfterMPin",
+                JSON.stringify({
+                    userLoginStatusMpin: 1,
+                    user_id: user_id,
+                    userStatus: response.status,
+                })
+            );
+            GetDataAfterMPinStatus()
         } else {
             handleErrorMsg()
             setErrorMessage(response.message)
@@ -70,6 +93,14 @@ const MPin = ({ navigation, route }) => {
                     opacity: fadeAnim
                 }]}>
                     <Text style={styles.snackbarText}>{errorMessage}</Text>
+                </Animated.View>
+            )}
+
+            {isSuccessMessage !== '' && (
+                <Animated.View style={[styles.snackbar, {
+                    opacity: fadeAnim, backgroundColor: COLORS.feedback.successBG
+                }]}>
+                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{isSuccessMessage}</Text>
                 </Animated.View>
             )}
 
