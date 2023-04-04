@@ -8,7 +8,6 @@ import { Input } from '../../../components/CustomInput';
 import TitleSection from '../../../components/TitleSection';
 import { COLORS, FONT, SIZES } from '../../../constants';
 import { LoginApi } from '../../../constants/AllApiCall';
-import { BASE_URL } from '../../../constants/api';
 import { validateEmail } from '../../../constants/methods';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;

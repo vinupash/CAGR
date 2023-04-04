@@ -4,17 +4,13 @@ import { BackBtn, SecondaryBtn } from '../../../components/CustomButton';
 import { COLORS, FONT, SIZES, SHADOWS } from '../../../constants';
 import TitleSection from '../../../components/TitleSection';
 import { BASE_URL } from '../../../constants/api';
-import { AddressType, GetAccountType, GetBankList, GetCountryList, GetStateList } from '../../../constants/AllApiCall';
-import RadioButtonBox from '../../../components/RadioButtonBox';
-import { Dropdown } from 'react-native-element-dropdown';
 import { Input } from '../../../components/CustomInput';
-import { validateIFSCNum, validateMicrNum } from '../../../constants/methods';
 import MaritalRadioButton from '../../../components/MaritalRadioButton';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const KYCDetails = ({ navigation, route }) => {
-    const { user_id, user_mobile_no, profile_update } = route.params;
+    const { user_id, profile_update } = route.params;
     const [isLoading, setLoading] = useState(false);
     const [fatherhusbandName, setFatherhusbandName] = useState('');
     const [motherName, setMotherName] = useState('');
@@ -118,7 +114,6 @@ const KYCDetails = ({ navigation, route }) => {
                 setSuccessMessage(json.message)
                 navigation.navigate('NomineeDetails', {
                     user_id: user_id,
-                    user_mobile_no: user_mobile_no,
                     profile_update: true
                 })
             } else {
@@ -133,7 +128,7 @@ const KYCDetails = ({ navigation, route }) => {
         }
     }
 
-    console.log(user_id, user_mobile_no, profile_update);
+    // console.log(user_id, profile_update);
     // console.log(data);
 
     if (isLoading) {
@@ -157,7 +152,7 @@ const KYCDetails = ({ navigation, route }) => {
                 <Animated.View style={[styles.snackbar, {
                     opacity: fadeAnim, backgroundColor: COLORS.feedback.successBG
                 }]}>
-                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{errorMessage}</Text>
+                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{isSuccessMessage}</Text>
                 </Animated.View>
             )}
             <View style={[styles.topSection]}>
@@ -200,7 +195,7 @@ const KYCDetails = ({ navigation, route }) => {
                     <View style={{ marginTop: 20, marginBottom: 30 }}>
                         <SecondaryBtn
                             btnText='Submit'
-                            // onPress={() => navigation.navigate('KYCDetails', { user_id: user_id, user_mobile_no: user_mobile_no, profile_update: true })}
+                            // onPress={() => navigation.navigate('NomineeDetails', { user_id: user_id, profile_update: true })}
                             onPress={submitData}
                         />
                     </View>

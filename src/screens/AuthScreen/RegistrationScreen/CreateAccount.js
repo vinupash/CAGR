@@ -217,8 +217,8 @@ const CreateAccount = ({ navigation }) => {
                 {!isStatus ?
                     <SecondaryBtn
                         btnText='Verify Email ID'
-                        onPress={() => navigation.navigate('PasswordScreen', { user_id: user_id })}
-                    // onPress={submitEmail}
+                        // onPress={() => navigation.navigate('PasswordScreen', { user_id: user_id })}
+                        onPress={submitEmail}
                     />
                     :
                     <SecondaryBtn

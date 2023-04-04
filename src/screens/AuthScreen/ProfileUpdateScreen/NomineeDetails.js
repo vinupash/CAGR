@@ -3,61 +3,62 @@ import { StyleSheet, Text, View, SafeAreaView, StatusBar, ScrollView, Dimensions
 import { BackBtn, SecondaryBtn } from '../../../components/CustomButton';
 import { COLORS, FONT, SIZES, SHADOWS } from '../../../constants';
 import TitleSection from '../../../components/TitleSection';
-import { AddressType, GetCountryList, GetStateList } from '../../../constants/AllApiCall';
+import { BASE_URL } from '../../../constants/api';
+import { GetCountryList, GetRelationsListApi, GetStateList } from '../../../constants/AllApiCall';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Input } from '../../../components/CustomInput';
-import { BASE_URL } from '../../../constants/api';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from 'moment';
 
-const AddressDetails = ({ navigation, route }) => {
+const NomineeDetails = ({ navigation, route }) => {
     const { user_id, profile_update } = route.params;
     const [isLoading, setLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [isSuccessMessage, setSuccessMessage] = useState('');
     const fadeAnim = useRef(new Animated.Value(0)).current;
-    const [address1, setAddress1] = useState('')
-    const [address2, setAddress2] = useState('')
-    const [address3, setAddress3] = useState('')
-    const [valueAddress, setValueAddress] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
+
+    const [nomineeFirstName, setNomineeFirstName] = useState('')
+    const [nomineeMiddleName, setNomineeMiddleName] = useState('')
+    const [nomineeLastName, setNomineeLastName] = useState('')
+    const [selectedDate, setSelectedDate] = useState();
+    const [userBirth, setuserBirth] = useState(false);
+
+    const [isDataRelationsList, setDataRelationsList] = useState([]);
     const [isDataCountryList, setDataCountryList] = useState([]);
-    const [isDataAddressList, setDataAddressList] = useState([]);
     const [isDataStateList, setDataStateList] = useState([]);
-    const [city, setCity] = useState('')
-    const [pincode, setPincode] = useState('')
+    const [isFocusState, setIsFocusState] = useState(false);
+    const [isFocus, setIsFocus] = useState(false);
+    const [valueRelations, setValueRelations] = useState(null);
+    const [applicantRelation, setApplicantRelation] = useState('');
     const [valueState, setValueState] = useState(null);
     const [valueCountry, setValueCountry] = useState(null);
     const [isFocusCountry, setIsFocusCountry] = useState(false);
 
-    useEffect(() => {
-        const fetchDataAsync = async () => {
-            setLoading(true)
-            const resultCountry = await GetCountryList();
-            const resultState = await GetStateList();
-            const resultAddress = await AddressType();
-            setLoading(false)
-            console.log(resultAddress.result);
-            const isDataAddressList = [...resultAddress.result];
-            const newArrayListAddress = isDataAddressList.map((item) => {
-                return { label: item.add_type, value: item.add_type_id }
-            })
-            const isDataCountryList = [...resultCountry.result];
-            const newArrayListCountry = isDataCountryList.map((item) => {
-                return { label: item.fldv_nicename, value: item.fldi_id }
-            })
-            const isDataStateList = [...resultState.result];
-            const newArrayListState = isDataStateList.map((item) => {
-                return { label: item.fldv_name, value: item.fldi_id }
-            })
-            setDataCountryList(newArrayListCountry)
-            setDataAddressList(newArrayListAddress)
-            setDataStateList(newArrayListState)
-            // console.log('newArrayListState--->', newArrayListState);
-        };
-        fetchDataAsync();
-    }, []);
+    const [gaurdianFirstName, setGaurdianFirstName] = useState('')
+    const [gaurdianLastName, setGaurdianLastName] = useState('')
+    const [gaurdianMiddleName, setGaurdianMiddleName] = useState('')
+    const [city, setCity] = useState('')
+    const [pincode, setPincode] = useState('')
+
+    const showDatePicker = () => {
+        setuserBirth(true);
+    };
+
+    const hideDatePicker = () => {
+        setuserBirth(false);
+    };
+
+    const handleConfirm = (date) => {
+        setSelectedDate(date);
+        hideDatePicker();
+    };
+
+    const currentYear = moment().format("YYYY")
+    const nomineeBirthYear = moment(selectedDate).format("YYYY");
+    const age = currentYear - nomineeBirthYear;
 
     const handleErrorMsg = () => {
         Animated.timing(
@@ -87,32 +88,74 @@ const AddressDetails = ({ navigation, route }) => {
         }, 3000);
     };
 
+    useEffect(() => {
+        const fetchDataAsync = async () => {
+            setLoading(true)
+            const resultRelations = await GetRelationsListApi();
+            const resultCountry = await GetCountryList();
+            const resultState = await GetStateList();
+            setLoading(false)
+            const isDataRelationsList = [...resultRelations.result];
+            const newArrayListRelations = isDataRelationsList.map((item) => {
+                return { label: item.rel_name, value: item.rel_type }
+            })
+            const isDataCountryList = [...resultCountry.result];
+            const newArrayListCountry = isDataCountryList.map((item) => {
+                return { label: item.fldv_nicename, value: item.fldi_id }
+            })
+            const isDataStateList = [...resultState.result];
+            const newArrayListState = isDataStateList.map((item) => {
+                return { label: item.fldv_name, value: item.fldi_id }
+            })
+            setDataCountryList(newArrayListCountry)
+            setDataStateList(newArrayListState)
+            setDataRelationsList(newArrayListRelations)
+        };
+        fetchDataAsync();
+    }, []);
+
+    console.log(valueRelations);
+
     const submitData = async () => {
         setLoading(true)
         try {
 
-            if (!address1) {
+            if (!nomineeFirstName || !nomineeMiddleName || !nomineeLastName) {
                 handleErrorMsg()
-                setErrorMessage('Please enter address line 1');
+                setErrorMessage('Please enter nominee full name');
                 return
             }
 
-            if (!address2) {
+            if (!selectedDate) {
                 handleErrorMsg()
-                setErrorMessage('Please enter address line 2');
+                setErrorMessage('Please select date of birth');
                 return
             }
 
-            if (!address3) {
+            if (!valueRelations) {
                 handleErrorMsg()
-                setErrorMessage('Please enter address line 3');
+                setErrorMessage('Please select relationship with the applicant');
                 return
+            } else {
+                if (valueRelations === 'Other') {
+                    if (!applicantRelation) {
+                        handleErrorMsg()
+                        setErrorMessage('Please enter relationship with the applicant');
+                        return
+                    }
+                } else {
+                    console.log('Selected Relations', valueRelations);
+                }
             }
 
-            if (!valueAddress) {
-                handleErrorMsg()
-                setErrorMessage('Please select addres type');
-                return
+            if (age >= 18) {
+                console.log('age', age);
+            } else {
+                if (!gaurdianFirstName || !gaurdianMiddleName || !gaurdianLastName) {
+                    handleErrorMsg()
+                    setErrorMessage('Plese enter gaurdian full name');
+                    return
+                }
             }
 
             if (!city) {
@@ -141,16 +184,21 @@ const AddressDetails = ({ navigation, route }) => {
 
             var myHeaders = new Headers();
             myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+            myHeaders.append("Cookie", "ses_cagr_f=28962bc7f219a0c34bbaf2493fc82029");
 
             var formdata = new FormData();
             formdata.append("user_id", user_id);
-            formdata.append("address_line_1", address1);
-            formdata.append("address_line_2", address2);
-            formdata.append("address_line_3", address3);
-            formdata.append("address_type", valueAddress);
+            formdata.append("first_name", nomineeFirstName);
+            formdata.append("middle_name", nomineeMiddleName);
+            formdata.append("last_name", nomineeLastName);
+            formdata.append("nominee_dob", moment(selectedDate).format("YYYY-MM-DD"));
+            formdata.append("nominee_relation", selectedRelations === "Other" ? applicantRelation : selectedRelations);
+            formdata.append("guardian_first_name", age >= 18 ? "no gaurdian" : gaurdianFirstName);
+            formdata.append("guardian_middle_name", age >= 18 ? "no gaurdian" : gaurdianMiddleName);
+            formdata.append("guardian_last_name", age >= 18 ? "no gaurdian" : gaurdianLastName);
+            formdata.append("country", selectedCountry);
+            formdata.append("state", selectedState);
             formdata.append("city", city);
-            formdata.append("state", valueState);
-            formdata.append("country", valueCountry);
             formdata.append("pincode", pincode);
 
             var requestOptions = {
@@ -160,14 +208,15 @@ const AddressDetails = ({ navigation, route }) => {
                 redirect: 'follow'
             };
 
-            const response = await fetch(BASE_URL + "register/updateaddressdetails", requestOptions);
+            const response = await fetch(BASE_URL + "register/updatenominee", requestOptions);
             const json = await response.json();
-
-            if (json.status == true) {
+            setLoading(false);
+            console.log('json --->', json);
+            if (json.status === true) {
                 alert(json.message)
                 handleSuccessMsg()
                 setSuccessMessage(json.message)
-                navigation.navigate('Bank Details', { user_id: user_id, profile_update: true })
+                navigation.navigate('Documents', { user_id: user_id, profile_update: true })
             } else {
                 handleErrorMsg()
                 setErrorMessage(json.message)
@@ -180,10 +229,12 @@ const AddressDetails = ({ navigation, route }) => {
         }
     }
 
+    console.log(user_id, profile_update);
+    // console.log(data);
+
     if (isLoading) {
         return <ActivityIndicator size='small' color={COLORS.brand.primary} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
     }
-
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar
@@ -211,40 +262,66 @@ const AddressDetails = ({ navigation, route }) => {
                     showsVerticalScrollIndicator={false}
                 >
                     <TitleSection
-                        titleText='Address details'
-                        subText='We’ll need some of your personal details'
+                        titleText='Nominee details'
+                        subText='Tell us about your Nominee'
                     />
 
-                    <Input
-                        label='Address 1'
-                        placeholder='Enter address 1'
-                        value={address1}
-                        setValue={setAddress1}
-                    />
-
-                    <View style={{ marginTop: 10 }}>
-                        <Input
-                            label='Address 2'
-                            placeholder='Enter address 2'
-                            value={address2}
-                            setValue={setAddress2}
-                        />
-
-                    </View>
-
-                    <View style={{ marginTop: 10 }}>
-                        <Input
-                            label='Address 3'
-                            placeholder='Enter address 3'
-                            value={address3}
-                            setValue={setAddress3}
-                        />
-
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ width: '32%' }}>
+                            <Input
+                                label='First name'
+                                placeholder='First'
+                                value={nomineeFirstName}
+                                setValue={setNomineeFirstName}
+                            />
+                        </View>
+                        <View style={{ width: '32%' }}>
+                            <Input
+                                label='Middle name'
+                                placeholder='Middle'
+                                value={nomineeMiddleName}
+                                setValue={setNomineeMiddleName}
+                            />
+                        </View>
+                        <View style={{ width: '32%' }}>
+                            <Input
+                                label='Last name'
+                                placeholder='Last'
+                                value={nomineeLastName}
+                                setValue={setNomineeLastName}
+                            />
+                        </View>
                     </View>
 
                     <View style={{ marginTop: 10 }}>
                         <View style={styles.secureTextBox}>
-                            <Text style={styles.inputLabel}>Address type</Text>
+                            <Text style={styles.inputLabel}>Date of birth</Text>
+                            <Text style={styles.inputLabelRight}></Text>
+                        </View>
+                        <TouchableOpacity
+                            onPress={showDatePicker}
+                            style={styles.inputDateBox}
+                        >
+                            <Text
+                                style={[styles.inputDate, { color: selectedDate ? COLORS.brand.black : COLORS.neutrals.thunder }]} name="userbirth" value={userBirth}
+                                placeholder="Select Date"
+                                placeholderTextColor={selectedDate ? COLORS.brand.black : COLORS.neutrals.thunder}
+                                onChangeText={actualData => setuserBirth(actualData)}
+                            >{`${selectedDate ? moment(selectedDate).format("DD/MM/YYYY") : "Select Date"}`}</Text>
+
+                        </TouchableOpacity>
+
+                        <DateTimePickerModal
+                            isVisible={userBirth}
+                            mode="date"
+                            onConfirm={handleConfirm}
+                            onCancel={hideDatePicker}
+                        />
+                    </View>
+
+                    <View style={{ marginTop: 10 }}>
+                        <View style={styles.secureTextBox}>
+                            <Text style={styles.inputLabel}>Relationship with the applicant</Text>
                             <Text style={styles.inputLabelRight}></Text>
                         </View>
                         <Dropdown
@@ -253,22 +330,75 @@ const AddressDetails = ({ navigation, route }) => {
                             selectedTextStyle={styles.selectedTextStyle}
                             inputSearchStyle={styles.inputSearchStyle}
                             iconStyle={styles.iconStyle}
-                            data={isDataAddressList}
+                            data={isDataRelationsList}
                             search
                             maxHeight={300}
                             labelField="label"
                             valueField="value"
-                            placeholder={!isFocus ? 'Address type' : '...'}
+                            placeholder={!isFocus ? 'Relationship' : '...'}
                             searchPlaceholder="Search..."
-                            value={valueAddress}
+                            value={valueRelations}
                             onFocus={() => setIsFocus(true)}
                             onBlur={() => setIsFocus(false)}
                             onChange={item => {
-                                setValueAddress(item.value);
+                                setValueRelations(item.value);
                                 setIsFocus(false);
                             }}
                         />
                     </View>
+
+                    {
+                        valueRelations === 'Other' ?
+                            <>
+                                <View style={{ marginTop: 10 }}>
+                                    <Input
+                                        label='Relations'
+                                        placeholder='Relationship with the applicant'
+                                        value={applicantRelation}
+                                        setValue={setApplicantRelation}
+                                    />
+                                </View>
+                            </>
+                            :
+                            null
+                    }
+
+                    {age >= 18 || age == '' ?
+                        null
+                        :
+                        <View style={{ marginTop: 10 }}>
+                            <View style={styles.secureTextBox}>
+                                <Text style={styles.inputLabel}>Gaurdian Full Name</Text>
+                                <Text style={styles.inputLabelRight}></Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ width: '32%' }}>
+                                    <Input
+                                        label='First name'
+                                        placeholder='First'
+                                        value={gaurdianFirstName}
+                                        setValue={setGaurdianFirstName}
+                                    />
+                                </View>
+                                <View style={{ width: '32%' }}>
+                                    <Input
+                                        label='Middle name'
+                                        placeholder='Middle'
+                                        value={gaurdianMiddleName}
+                                        setValue={setGaurdianMiddleName}
+                                    />
+                                </View>
+                                <View style={{ width: '32%' }}>
+                                    <Input
+                                        label='Last name'
+                                        placeholder='Last'
+                                        value={gaurdianLastName}
+                                        setValue={setGaurdianLastName}
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                    }
 
                     <View style={{ marginTop: 10 }}>
                         <Input
@@ -303,17 +433,17 @@ const AddressDetails = ({ navigation, route }) => {
                             iconStyle={styles.iconStyle}
                             data={isDataStateList}
                             search
-                            maxHeight={300}
+                            maxHeight={180}
                             labelField="label"
                             valueField="value"
-                            placeholder={!isFocus ? 'State' : '...'}
+                            placeholder={!isFocusState ? 'State' : '...'}
                             searchPlaceholder="Search..."
                             value={valueState}
-                            onFocus={() => setIsFocus(true)}
-                            onBlur={() => setIsFocus(false)}
+                            onFocus={() => setIsFocusState(true)}
+                            onBlur={() => setIsFocusState(false)}
                             onChange={item => {
                                 setValueState(item.value);
-                                setIsFocus(false);
+                                setIsFocusState(false);
                             }}
                         />
                     </View>
@@ -345,10 +475,11 @@ const AddressDetails = ({ navigation, route }) => {
                             }}
                         />
                     </View>
+
                     <View style={{ marginTop: 20, marginBottom: 30 }}>
                         <SecondaryBtn
                             btnText='Submit'
-                            // onPress={() => navigation.navigate('Bank Details', { user_id: user_id, profile_update: true })}
+                            // onPress={() => navigation.navigate('Documents', { user_id: user_id, profile_update: true })}
                             onPress={submitData}
                         />
                     </View>
@@ -359,7 +490,7 @@ const AddressDetails = ({ navigation, route }) => {
     )
 }
 
-export default AddressDetails
+export default NomineeDetails
 
 const styles = StyleSheet.create({
     container: {
@@ -544,4 +675,3 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 })
-

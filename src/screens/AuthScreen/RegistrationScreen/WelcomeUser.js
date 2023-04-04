@@ -6,8 +6,8 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const WelcomeUser = ({ navigation, route }) => {
-    const { user_id, user_mobile_no } = route.params;
-    console.log(user_id, user_mobile_no);
+    const { user_id } = route.params;
+    // console.log(user_id);
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar
@@ -40,16 +40,15 @@ const WelcomeUser = ({ navigation, route }) => {
                                     screen: "Address Details",
                                     params: {
                                         user_id: user_id,
-                                        user_mobile_no: user_mobile_no,
                                         profile_update: true
                                     }
                                 })}
-                        // onPress={submitData}
                         />
                     </View>
                     <View style={{ alignSelf: 'center' }}>
                         <TransparentBtn
                             btnText='Go to Dashboard'
+                        // onPress={submitData}
                         />
                     </View>
 

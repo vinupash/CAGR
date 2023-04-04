@@ -192,8 +192,8 @@ const VerifyMobileNumber = ({ navigation, route }) => {
             <View style={styles.bottomSectionPage}>
                 <SecondaryBtn
                     btnText='Verify'
-                    onPress={() => navigation.navigate('VerifyPan', { user_id: user_id })}
-                // onPress={mobileNumberVerify}
+                    // onPress={() => navigation.navigate('VerifyPan', { user_id: user_id })}
+                    onPress={mobileNumberVerify}
                 />
             </View>
         </SafeAreaView>

@@ -6,7 +6,6 @@ import { COLORS, FONT, SIZES } from '../../../constants';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import { BASE_URL } from '../../../constants/api';
 import { MPinApi } from '../../../constants/AllApiCall';
 
 const MPin = ({ navigation, route }) => {
@@ -54,56 +53,6 @@ const MPin = ({ navigation, route }) => {
             setErrorMessage(response.message)
         }
     };
-
-    // const userLogin = async () => {
-    //     setLoading(true)
-    //     try {
-    //         if (!isMPin) {
-    //             handleErrorMsg()
-    //             setErrorMessage('Please enter vaild M-Pin');
-    //             return
-    //         }
-    //         var myHeaders = new Headers();
-    //         myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
-    //         myHeaders.append("Cookie", "name=2; PHPSESSID=2d71a775e58727ddcdf2eca0c955f708");
-
-    //         var formdata = new FormData();
-    //         formdata.append("user_id", user_id);
-    //         formdata.append("mpin", isMPin);
-
-    //         var requestOptions = {
-    //             method: 'POST',
-    //             headers: myHeaders,
-    //             body: formdata,
-    //             redirect: 'follow'
-    //         };
-
-    //         const response = await fetch(BASE_URL + "register/verifympin", requestOptions);
-    //         const json = await response.json();
-    //         // console.log('json --->', json);
-    //         if (json.status === true) {
-    //             alert(json.message)
-    //             // AsyncStorage.setItem(
-    //             //     "userDataAfterMPin",
-    //             //     JSON.stringify({
-    //             //         userLoginStatusMpin: 1,
-    //             //         user_id: user_id,
-    //             //         userStatus: json.status,
-    //             //     })
-    //             // );
-    //             // GetDataAfterMPinStatus()
-    //         } else {
-    //             handleErrorMsg()
-    //             setErrorMessage(json.message)
-    //             setMPin('')
-    //         }
-
-    //     } catch (error) {
-    //         console.error(error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
 
     if (isLoading) {
         return <ActivityIndicator size='small' color={COLORS.brand.primary} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;

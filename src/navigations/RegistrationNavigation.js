@@ -12,6 +12,7 @@ import Income from '../screens/AuthScreen/RegistrationScreen/Income';
 import InvestorType from '../screens/AuthScreen/RegistrationScreen/InvestorType';
 import TaxStatus from '../screens/AuthScreen/RegistrationScreen/TaxStatus';
 import WelcomeUser from '../screens/AuthScreen/RegistrationScreen/WelcomeUser';
+import SetMPin from '../screens/AuthScreen/RegistrationScreen/SetMPin';
 
 const RegistrationStack = createNativeStackNavigator();
 
@@ -53,6 +54,14 @@ const RegistrationNavigation = () => {
             <RegistrationStack.Screen
                 name="VerifyPan"
                 component={VerifyPan}
+                options={{
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                }}
+            />
+            <RegistrationStack.Screen
+                name="SetMPin"
+                component={SetMPin}
                 options={{
                     headerShown: false,
                     animation: 'slide_from_right'

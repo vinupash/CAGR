@@ -14,15 +14,13 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const VerifyPan = ({ navigation, route }) => {
-    const { user_id, user_mobile_no } = route.params;
+    const { user_id } = route.params;
     const [isLoading, setLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [isSuccessMessage, setSuccessMessage] = useState('');
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const [panNumber, setPanNumber] = useState('')
-
-    // console.log(user_id, user_mobile_no);
 
     const handleErrorMsg = () => {
         Animated.timing(
@@ -53,49 +51,27 @@ const VerifyPan = ({ navigation, route }) => {
     };
 
     const verifyPanNumber = async () => {
-        setLoading(true)
-        try {
-            if (panNumber === null || !validatePanNum(panNumber)) {
-                handleErrorMsg()
-                setErrorMessage('Invalid pan card number');
-                return
-            }
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
-
-            var formdata = new FormData();
-            formdata.append("user_id", user_id);
-            formdata.append("pan", panNumber);
-
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: formdata,
-                redirect: 'follow'
-            };
-
-            const response = await fetch(baseUrlDemo + "register/verifypan", requestOptions);
-            const json = await response.json();
-            setLoading(false);
-            console.log('json --->', json);
-            if (json.status === true) {
-                handleSuccessMsg()
-                setSuccessMessage(json.message)
-                alert(json.message);
-                navigation.navigate('SetMPin', { user_id: user_id, user_mobile_no: user_mobile_no })
-            } else {
-                handleErrorMsg()
-                setErrorMessage(json.message)
-            }
-
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
+        if (panNumber === null || !validatePanNum(panNumber)) {
+            handleErrorMsg()
+            setErrorMessage('Invalid pan card number');
+            return
         }
+        setLoading(true)
+        const response = await ResendMobileOtpApi(user_id, panNumber);
+        setLoading(false);
+        console.log('response --->', response);
+        if (response.status === true) {
+            handleSuccessMsg()
+            setSuccessMessage(response.message)
+            alert(response.message);
+            navigation.navigate('SetMPin', { user_id: user_id })
+        } else {
+            handleErrorMsg()
+            setErrorMessage(response.message)
+        }
+
     }
 
-    console.log(user_id, user_mobile_no);
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar
@@ -114,7 +90,7 @@ const VerifyPan = ({ navigation, route }) => {
                 <Animated.View style={[styles.snackbar, {
                     opacity: fadeAnim, backgroundColor: COLORS.feedback.successBG
                 }]}>
-                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{errorMessage}</Text>
+                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{isSuccessMessage}</Text>
                 </Animated.View>
             )}
             <View style={[styles.topSection]}>
@@ -137,8 +113,9 @@ const VerifyPan = ({ navigation, route }) => {
             <View style={styles.bottomSectionPage}>
                 <SecondaryBtn
                     btnText='Verify'
-                    onPress={() => navigation.navigate('YourSelf', { user_id: user_id, user_mobile_no: user_mobile_no })}
-                // onPress={verifyPanNumber}
+                    // onPress={() => navigation.navigate('SetMPin', { user_id: user_id })}
+                    // onPress={() => navigation.navigate('YourSelf', { user_id: user_id })}
+                    onPress={verifyPanNumber}
                 />
             </View>
         </SafeAreaView>

@@ -397,6 +397,94 @@ export const MobileNumberVerifyApi = async (user_id, isOTP) => {
     }
 };
 
+export const VerifyPanApi = async (user_id, panNumber) => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var formdata = new FormData();
+        formdata.append("user_id", user_id);
+        formdata.append("pan", panNumber);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "register/verifypan", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export const setMpinPasswordApi = async (user_id, isMpin) => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var formdata = new FormData();
+        formdata.append("user_id", user_id);
+        formdata.append("mpin", isMpin);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "register/setmpin", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export const GetRelationsListApi = async () => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "common/relations", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+
+export const AddressProofType = async () => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "common/addressprooftype", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
 
 
 

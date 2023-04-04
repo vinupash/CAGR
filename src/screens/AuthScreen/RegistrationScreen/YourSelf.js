@@ -16,7 +16,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment';
 
 const YourSelf = ({ navigation, route }) => {
-    const { user_id, user_mobile_no } = route.params;
+    const { user_id } = route.params;
     const [isLoading, setLoading] = useState(false);
     const [userFirstName, setUserFirstName] = useState('')
     const [userMiddleName, setUserMiddleName] = useState('')
@@ -123,7 +123,7 @@ const YourSelf = ({ navigation, route }) => {
                 handleSuccessMsg()
                 alert(json.message);
                 setSuccessMessage(json.message);
-                navigation.navigate('Gender', { user_id })
+                navigation.navigate('Gender', { user_id: user_id })
             } else {
                 handleErrorMsg()
                 setErrorMessage(json.message)
@@ -136,7 +136,7 @@ const YourSelf = ({ navigation, route }) => {
         }
     }
 
-    console.log(user_id, user_mobile_no);
+    // console.log(user_id);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -156,7 +156,7 @@ const YourSelf = ({ navigation, route }) => {
                 <Animated.View style={[styles.snackbar, {
                     opacity: fadeAnim, backgroundColor: COLORS.feedback.successBG
                 }]}>
-                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{errorMessage}</Text>
+                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{isSuccessMessage}</Text>
                 </Animated.View>
             )}
             <View style={[styles.topSection]}>
@@ -229,8 +229,8 @@ const YourSelf = ({ navigation, route }) => {
             <View style={styles.bottomSectionPage}>
                 <SecondaryBtn
                     btnText='Next'
-                    onPress={() => navigation.navigate('Gender', { user_id: user_id, user_mobile_no: user_mobile_no })}
-                // onPress={submitData}
+                    // onPress={() => navigation.navigate('Gender', { user_id: user_id })}
+                    onPress={submitData}
                 />
             </View>
         </SafeAreaView>

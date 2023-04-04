@@ -4,8 +4,7 @@ import { BackBtn, SecondaryBtn } from '../../../components/CustomButton';
 import { COLORS, FONT, SIZES, SHADOWS } from '../../../constants';
 import TitleSection from '../../../components/TitleSection';
 import { BASE_URL } from '../../../constants/api';
-import { AddressType, GetAccountType, GetBankList, GetCountryList, GetStateList } from '../../../constants/AllApiCall';
-import RadioButtonBox from '../../../components/RadioButtonBox';
+import { GetAccountType, GetBankList } from '../../../constants/AllApiCall';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Input } from '../../../components/CustomInput';
 import { validateIFSCNum, validateMicrNum } from '../../../constants/methods';
@@ -13,7 +12,7 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const BankDetails = ({ navigation, route }) => {
-    const { user_id, user_mobile_no, profile_update } = route.params;
+    const { user_id, profile_update } = route.params;
     const [isLoading, setLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -151,7 +150,6 @@ const BankDetails = ({ navigation, route }) => {
                 setSuccessMessage(json.message)
                 navigation.navigate('KYCDetails', {
                     user_id: user_id,
-                    user_mobile_no: user_mobile_no,
                     profile_update: true
                 })
             } else {
@@ -166,7 +164,7 @@ const BankDetails = ({ navigation, route }) => {
         }
     }
 
-    console.log(user_id, user_mobile_no, profile_update, valueBankName, valueAccountType);
+    // console.log(user_id, profile_update, valueBankName, valueAccountType);
     // console.log(data);
 
     if (isLoading) {
@@ -190,7 +188,7 @@ const BankDetails = ({ navigation, route }) => {
                 <Animated.View style={[styles.snackbar, {
                     opacity: fadeAnim, backgroundColor: COLORS.feedback.successBG
                 }]}>
-                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{errorMessage}</Text>
+                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{isSuccessMessage}</Text>
                 </Animated.View>
             )}
             <View style={[styles.topSection]}>
@@ -302,8 +300,8 @@ const BankDetails = ({ navigation, route }) => {
                     <View style={{ marginTop: 20, marginBottom: 30 }}>
                         <SecondaryBtn
                             btnText='Submit'
-                            onPress={() => navigation.navigate('KYCDetails', { user_id: user_id, user_mobile_no: user_mobile_no, profile_update: true })}
-                        // onPress={submitData}
+                            // onPress={() => navigation.navigate('KYCDetails', { user_id: user_id, profile_update: true })}
+                            onPress={submitData}
                         />
                     </View>
                 </ScrollView>

@@ -157,8 +157,8 @@ const PasswordScreen = ({ navigation, route }) => {
             <View style={styles.bottomSectionPage}>
                 <SecondaryBtn
                     btnText='Confirm'
-                    onPress={() => navigation.navigate('EnterMobileNumber', { user_id: user_id })}
-                // onPress={setAppPassword}
+                    // onPress={() => navigation.navigate('EnterMobileNumber', { user_id: user_id })}
+                    onPress={setAppPassword}
                 />
             </View>
         </SafeAreaView>

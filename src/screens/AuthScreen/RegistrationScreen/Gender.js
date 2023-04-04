@@ -9,7 +9,7 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const Gender = ({ navigation, route }) => {
-    const { user_id, user_mobile_no } = route.params;
+    const { user_id } = route.params;
     const [isLoading, setLoading] = useState(false);
     const [option, setOption] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -84,7 +84,7 @@ const Gender = ({ navigation, route }) => {
                 alert(json.message)
                 handleSuccessMsg()
                 setSuccessMessage(json.message)
-                navigation.navigate('Occupation', { user_id: user_id, user_mobile_no: user_mobile_no })
+                navigation.navigate('Occupation', { user_id: user_id })
             } else {
                 handleErrorMsg()
                 setErrorMessage(json.message)
@@ -97,7 +97,7 @@ const Gender = ({ navigation, route }) => {
         }
     }
 
-    console.log(user_id, user_mobile_no);
+    console.log(user_id);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -117,7 +117,7 @@ const Gender = ({ navigation, route }) => {
                 <Animated.View style={[styles.snackbar, {
                     opacity: fadeAnim, backgroundColor: COLORS.feedback.successBG
                 }]}>
-                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{errorMessage}</Text>
+                    <Text style={[styles.snackbarText, { color: COLORS.feedback.success }]}>{isSuccessMessage}</Text>
                 </Animated.View>
             )}
             <View style={[styles.topSection]}>
@@ -140,8 +140,8 @@ const Gender = ({ navigation, route }) => {
             <View style={styles.bottomSectionPage}>
                 <SecondaryBtn
                     btnText='Submit'
-                    onPress={() => navigation.navigate('Occupation', { user_id: user_id, user_mobile_no: user_mobile_no })}
-                // onPress={submitData}
+                    // onPress={() => navigation.navigate('Occupation', { user_id: user_id })}
+                    onPress={submitData}
                 />
             </View>
         </SafeAreaView>

@@ -73,13 +73,13 @@ const EnterMobileNumber = ({ navigation, route }) => {
         }
     }
 
-    var hideMobileNumaber = mobileNumber; //VERY BAD: Credit Card # *unencrypted* in source!
+    var hideMobileNumaber = mobileNumber;
     var userMobilenumbaer = hideMobileNumaber.replace(/.(?=.{3})/g, '*');
     console.log(userMobilenumbaer);
 
-    // if (isLoading) {
-    //     return <ActivityIndicator size='small' color={COLORS.brand.primary} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
-    // }
+    if (isLoading) {
+        return <ActivityIndicator size='small' color={COLORS.brand.primary} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -148,8 +148,8 @@ const EnterMobileNumber = ({ navigation, route }) => {
             <View style={styles.bottomSectionPage}>
                 <SecondaryBtn
                     btnText='Sent OTP'
-                    onPress={() => navigation.navigate('VerifyMobileNumber', { user_id: user_id, user_mobile_no: mobileNumber })}
-                // onPress={verifyMobileNumber}
+                    // onPress={() => navigation.navigate('VerifyMobileNumber', { user_id: user_id, user_mobile_no: mobileNumber })}
+                    onPress={verifyMobileNumber}
                 />
             </View>
         </SafeAreaView>
