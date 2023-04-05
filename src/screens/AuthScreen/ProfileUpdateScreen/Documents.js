@@ -27,6 +27,7 @@ const Documents = ({ navigation, route }) => {
     const [fileChequeData, setfileChequeData] = useState(null)
     const [fileAddressProofData, setfileAddressProofData] = useState(null)
     const [filePanCardData, setfilePanCardData] = useState(null)
+    console.log(user_id, profile_update);
 
     useEffect(() => {
         const fetchDataAsync = async () => {
@@ -248,7 +249,7 @@ const Documents = ({ navigation, route }) => {
                 alert(json.message)
                 handleSuccessMsg()
                 setSuccessMessage(json.message)
-                navigation.navigate('Registration Completed', { user_id: user_id, profile_update: true })
+                navigation.navigate('Registration Completed', { user_id: user_id, profile_update: profile_update })
             } else {
                 handleErrorMsg()
                 setErrorMessage(json.message)
@@ -431,10 +432,10 @@ const Documents = ({ navigation, route }) => {
                         />
                     </View>
 
-                    <View style={{ marginTop: 20, marginBottom: 30 }}>
+                    <View style={{ marginTop: 20, marginBottom: profile_update == true ? 30 : 80 }}>
                         <SecondaryBtn
                             btnText='Upload'
-                            // onPress={() => navigation.navigate('Registration Completed', { user_id: user_id, profile_update: true })}
+                            // onPress={() => navigation.navigate('Registration Completed', { user_id: user_id, profile_update: profile_update })}
                             onPress={submitDocuments}
                         />
                     </View>

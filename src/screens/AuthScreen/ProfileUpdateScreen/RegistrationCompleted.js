@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, ScrollView, Dimensions, TextInput, TouchableOpacity, ActivityIndicator, Animated } from 'react-native';
 import { SecondaryBtn } from '../../../components/CustomButton';
 import { COLORS, FONT, SIZES, SHADOWS } from '../../../constants';
@@ -6,8 +6,10 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 import RegistrationComplete from '../../../../assets/images/RegistrationComplete';
 import { SvgXml } from 'react-native-svg';
+import { AuthContext } from '../../../context/AuthContext';
 
 const RegistrationCompleted = ({ navigation, route }) => {
+    const { GetDataAfterMPinStatus } = useContext(AuthContext)
     const { user_id, profile_update } = route.params;
     console.log(user_id, profile_update);
     return (
@@ -32,12 +34,12 @@ const RegistrationCompleted = ({ navigation, route }) => {
                 {profile_update === true ?
                     <SecondaryBtn
                         btnText='Go back to Dashboard'
-                    // async storege
+                        onPress={() => { GetDataAfterMPinStatus() }}
                     />
                     :
                     <SecondaryBtn
                         btnText='Go back to Dashboard'
-                    // from dashboard
+                        onPress={() => navigation.navigate('DashboardStack', { screen: 'Dashboard' })}
                     />
                 }
             </View>

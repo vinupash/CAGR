@@ -150,7 +150,7 @@ const BankDetails = ({ navigation, route }) => {
                 setSuccessMessage(json.message)
                 navigation.navigate('KYCDetails', {
                     user_id: user_id,
-                    profile_update: true
+                    profile_update: profile_update
                 })
             } else {
                 handleErrorMsg()
@@ -164,7 +164,7 @@ const BankDetails = ({ navigation, route }) => {
         }
     }
 
-    // console.log(user_id, profile_update, valueBankName, valueAccountType);
+    console.log(user_id, profile_update, valueBankName, valueAccountType);
     // console.log(data);
 
     if (isLoading) {
@@ -297,10 +297,10 @@ const BankDetails = ({ navigation, route }) => {
                         />
                     </View>
 
-                    <View style={{ marginTop: 20, marginBottom: 30 }}>
+                    <View style={{ marginTop: 20, marginBottom: profile_update == true ? 30 : 80 }}>
                         <SecondaryBtn
                             btnText='Submit'
-                            // onPress={() => navigation.navigate('KYCDetails', { user_id: user_id, profile_update: true })}
+                            // onPress={() => navigation.navigate('KYCDetails', { user_id: user_id, profile_update: profile_update })}
                             onPress={submitData}
                         />
                     </View>

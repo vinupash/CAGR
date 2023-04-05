@@ -29,7 +29,8 @@ const Dashboard = ({ navigation }) => {
             const transformedUserLoginData = JSON.parse(userDataAfterMPin);
             console.log(transformedUserLoginData);
             setUser_id(transformedUserLoginData.user_id)
-            const response = await GetUserDataApi(user_id);
+            const userid = transformedUserLoginData.user_id;
+            const response = await GetUserDataApi(userid);
             setLoading(false)
             // console.log('response--->', response);
             if (response.status === "success") {
@@ -148,16 +149,24 @@ const Dashboard = ({ navigation }) => {
                 </>
                 :
                 (<UserRegistrationDetail
-                    onPress={() => navigation.navigate('ProfileUpdateNavigation',
-                        {
-                            screen: "Address Details",
-                            params: {
-                                user_id: user_id,
-                                profile_update: false
-                            }
+                    onPress={() => navigation.navigate('ProfileUpdate', {
+                        screen: 'Address Details',
+                        params: {
+                            user_id: user_id,
+                            profile_update: false
                         }
-                    )}
+                    })}
                 />)}
+
+            {/* <UserRegistrationDetail
+                onPress={() => navigation.navigate('ProfileUpdate', {
+                    screen: 'Address Details',
+                    params: {
+                        user_id: user_id,
+                        profile_update: false
+                    }
+                })}
+            /> */}
 
         </SafeAreaView>
     )

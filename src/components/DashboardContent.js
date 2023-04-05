@@ -38,6 +38,24 @@ const DashboardContent = () => {
         ).start();
     };
 
+    const [isCollapsed, setIsCollapsed] = useState(true);
+    const [animation] = useState(new Animated.Value(0));
+
+    const toggleCollapse = () => {
+        setShow(!show)
+        setIsCollapsed(!isCollapsed);
+        Animated.timing(animation, {
+            toValue: isCollapsed ? 1 : 0,
+            duration: 300,
+            useNativeDriver: false,
+        }).start();
+    };
+
+    const height = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 130],
+    });
+
     const Equity = () => {
         return (
             <View style={styles.tabBox}>
@@ -169,36 +187,39 @@ const DashboardContent = () => {
                 </View>
             </View>
 
-            {show && (
-                <Animated.View style={{ opacity: fadeAnim }}>
-                    <View style={{
-                        height: 0.8,
-                        backgroundColor: 'rgba(255, 255, 255 ,0.3)',
-                        alignSelf: 'stretch'
-                    }} />
-                    <View style={[styles.showBox]}>
-                        <CustomSwitch
-                            selectionMode={1}
-                            option1="Equity"
-                            option2="Debt"
-                            option3="Liquid"
-                            onSelectSwitch={onSelectSwitch}
-                        />
-                        <View>
-                            {dashboardTab == 1 && <Equity />}
-                            {dashboardTab == 2 && <Debt />}
-                            {dashboardTab == 3 && <Liquid />}
-                        </View>
-                    </View>
-                </Animated.View>
-            )}
 
+            <Animated.View style={{ height }}>
+                <View style={{
+                    height: 0.8,
+                    backgroundColor: 'rgba(255, 255, 255 ,0.3)',
+                    alignSelf: 'stretch'
+                }} />
+                <View style={[styles.showBox]}>
+                    {show ?
+                        <>
+                            <CustomSwitch
+                                selectionMode={1}
+                                option1="Equity"
+                                option2="Debt"
+                                option3="Liquid"
+                                onSelectSwitch={onSelectSwitch}
+                            />
+                        </> : null}
+                    <View>
+                        {dashboardTab == 1 && <Equity />}
+                        {dashboardTab == 2 && <Debt />}
+                        {dashboardTab == 3 && <Liquid />}
+                    </View>
+                </View>
+            </Animated.View>
 
             <TouchableOpacity
-                onPress={handleShowSection}
+                onPress={() => {
+                    toggleCollapse()
+                }}
                 style={styles.collapseArrow}
             >
-                <SvgXml xml={showMoreToggle ? UpIcon : DownIcon} width={12} height={8} />
+                <SvgXml xml={isCollapsed ? DownIcon : UpIcon} width={12} height={8} />
             </TouchableOpacity>
         </LinearGradient>
     )

@@ -484,13 +484,13 @@ export const AddressProofType = async () => {
     }
 }
 
-export const GetUserDataApi = async (user_id) => {
+export const GetUserDataApi = async (userid) => {
     try {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
 
         var formdata = new FormData();
-        formdata.append("cust_id", user_id);
+        formdata.append("cust_id", userid);
 
         var requestOptions = {
             method: 'POST',

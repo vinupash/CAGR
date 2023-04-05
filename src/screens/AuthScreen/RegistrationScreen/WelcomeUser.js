@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, ScrollView, Dimensions, TextInput, TouchableOpacity, ActivityIndicator, Animated, ImageBackground } from 'react-native';
 import { BackBtn, SecondaryBtn, TransparentBtn } from '../../../components/CustomButton';
 import { COLORS, FONT, SIZES, SHADOWS, assets } from '../../../constants';
+import { AuthContext } from '../../../context/AuthContext';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const WelcomeUser = ({ navigation, route }) => {
+    const { GetDataAfterMPinStatus } = useContext(AuthContext)
     const { user_id } = route.params;
     // console.log(user_id);
     return (
@@ -48,7 +50,8 @@ const WelcomeUser = ({ navigation, route }) => {
                     <View style={{ alignSelf: 'center' }}>
                         <TransparentBtn
                             btnText='Go to Dashboard'
-                        // onPress={submitData}
+                            // onPress={submitData}
+                            onPress={() => { GetDataAfterMPinStatus() }}
                         />
                     </View>
 

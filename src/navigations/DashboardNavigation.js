@@ -4,6 +4,7 @@ import Dashboard from '../screens/AppScreen/Dashboard';
 import InvestStack from './InvestNavigation';
 import ReedeemStack from './ReedeemNavigation';
 import SwitchStack from './SwitchNavigation';
+import ProfileUpdateStack from './ProfileUpdateNavigation';
 const DashboardStack = createNativeStackNavigator();
 const DashboardNavigation = () => {
     return (
@@ -35,6 +36,14 @@ const DashboardNavigation = () => {
             <DashboardStack.Screen
                 name="SwitchStack"
                 component={SwitchStack}
+                options={{
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                }}
+            />
+            <DashboardStack.Screen
+                name="ProfileUpdate"
+                component={ProfileUpdateStack}
                 options={{
                     headerShown: false,
                     animation: 'slide_from_right'
