@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         backgroundColor: COLORS.neutrals.coconut,
         borderColor: COLORS.neutrals.pearl,
-        borderRadius: 5,
+        borderRadius: 0,
         paddingHorizontal: 10,
         flexDirection: 'row',
         alignItems: 'center'

@@ -77,7 +77,7 @@ const Invest = ({ navigation }) => {
             const resultFundDivOptionsApi = await FundDivOptionsApi();
             const resultInvestFund = await GetAllInvestFundListApi(userId);
             setLoading(false)
-            console.log('resultAMCMaster--->', resultAMCMaster.result);
+            // console.log('resultAMCMaster--->', resultAMCMaster.result);
             // console.log('resultSchemeMaster--->', resultSchemeMaster.result);
             // console.log('resultFundDivOptionsApi--->', resultFundDivOptionsApi.result);
             // console.log('resultInvestFund--->', resultInvestFund.result.arrFunds);
@@ -134,12 +134,14 @@ const Invest = ({ navigation }) => {
                         value={isSearchData}
                         setValue={setSearchData}
                     />
-                    <TouchableOpacity
-                        style={{ marginTop: 10 }}
-                        onPress={ClearAll}
-                    >
-                        <Text style={{ color: COLORS.brand.secondary, textAlign: 'right', fontFamily: FONT.PlusJakartaSansRegular, fontSize: SIZES.font }}>Clear all</Text>
-                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+                        <TouchableOpacity
+                            style={{ marginTop: 5, marginRight: 5 }}
+                            onPress={ClearAll}
+                        >
+                            <Text style={{ color: COLORS.brand.secondary, fontFamily: FONT.PlusJakartaSansRegular, fontSize: SIZES.font }}>Clear all</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={{ marginTop: 0 }}>
                     <View style={styles.secureTextBox}>
@@ -230,7 +232,7 @@ const Invest = ({ navigation }) => {
 
     const FundItem = ({ title, investedAmount, bankImage, nav, sip_minamount, invest_id, fund_growth, fund_class }) => (
         <TouchableOpacity
-            onPress={() => navigation.navigate('Invest Stack',
+            onPress={() => navigation.navigate('InvestStack',
                 {
                     screen: 'Invest Details',
                     params: {
@@ -331,21 +333,21 @@ const Invest = ({ navigation }) => {
         return;
     }
 
-    console.log(valueAMCMaster, valueSchemeMaster, valueFundDivOptions);
+    // console.log(valueAMCMaster, valueSchemeMaster, valueFundDivOptions);
 
     const getFilteredData = async () => {
-        // const filteredProducts = isGetAllInvestFundList.filter((item) => {
-        //     if (item.schname.toLowerCase().match(isSearchData) || item.fundgrowth.match(valueFundDivOptions) || item.schname.match(isSearchData) || item.amccode.match(valueAMCMaster) || item.fundclas.match(valueSchemeMaster)) {
-        //         return item;
-        //     }
-        // });
+        const filteredProducts = isGetAllInvestFundList.filter((item) => {
+            if (item.schname.toLowerCase().match(isSearchData) || item.fundgrowth.match(valueFundDivOptions) || item.schname.match(isSearchData) || item.amccode.match(valueAMCMaster) || item.fundclas.match(valueSchemeMaster)) {
+                return item;
+            }
+        });
         // console.log('filteredProducts--->', filteredProducts);
-        // setGetAllInvestFundList(filteredProducts)
+        setGetAllInvestFundList(filteredProducts)
         // setLoading(true)
-        console.log(user_id);
-        const response = await GetAllInvestFundListFilterApi(user_id, valueAMCMaster);
+        // console.log(user_id);
+        // const response = await GetAllInvestFundListFilterApi(user_id);
         // setLoading(false)
-        console.log('response--->', response);
+        // console.log('response--->', response);
         setFilterTitle('Search result')
     }
 

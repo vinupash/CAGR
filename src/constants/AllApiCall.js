@@ -590,14 +590,14 @@ export const GetAllInvestFundListApi = async (userId) => {
     }
 }
 
-export const GetAllInvestFundListFilterApi = async (user_id, valueAMCMaster) => {
+export const GetAllInvestFundListFilterApi = async (user_id) => {
     try {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
 
         var formdata = new FormData();
         formdata.append("user_id", user_id);
-        formdata.append("fundhouse", valueAMCMaster);
+        formdata.append("fundhouse", '');
         formdata.append("schemetype", "");
         formdata.append("fundgrowth", "");
         formdata.append("fundoption", "");
@@ -617,6 +617,125 @@ export const GetAllInvestFundListFilterApi = async (user_id, valueAMCMaster) => 
         console.error(error);
     }
 }
+
+export const GetInvestFundDetails = async (idFund) => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var formdata = new FormData();
+        formdata.append("fundid", idFund);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "common/fundetailsbyid", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const GetFolioNumberList = async (userid, AmcCode) => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var formdata = new FormData();
+        formdata.append("user_id", userid);
+        formdata.append("amc_code", AmcCode);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "common/getFolioData", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const GetBankDetails = async (userid) => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var formdata = new FormData();
+        formdata.append("cust_id", userid);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "profile/userbankdetail", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const GetAllNomineeList = async (userid) => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+        myHeaders.append("Cookie", "ses_cagr_f=fbc60ea35e7a026f878e98982a041a80");
+
+        var formdata = new FormData();
+        formdata.append("cust_id", userid);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "profile/usernominee", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const TransactionOtpApi = async (user_id) => {
+    try {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YWRtaW46MTIzNA==");
+
+        var formdata = new FormData();
+        formdata.append("user_id", user_id);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        const response = await fetch(BASE_URL + "invest/validate_otp_details", requestOptions);
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
 
 
 
