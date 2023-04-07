@@ -12,9 +12,10 @@ import {
     Image,
     Keyboard,
     FlatList,
-    ActivityIndicator
+    ActivityIndicator,
+    Animated
 } from 'react-native';
-import { AMCMasterApi, FundDivOptionsApi, GetAllInvestFundListApi, SchemeMasterApi } from '../../../constants/AllApiCall';
+import { AMCMasterApi, FundDivOptionsApi, GetAllInvestFundListApi, GetAllInvestFundListFilterApi, SchemeMasterApi } from '../../../constants/AllApiCall';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS, SHADOWS, SIZES, FONT, assets } from '../../../constants';
 import { BackBtnBlue } from '../../../components/CustomButton';
@@ -42,6 +43,26 @@ const Invest = ({ navigation }) => {
     const [isDataFundDivOptionsList, setDataFundDivOptionsList] = useState([]);
 
     const [isGetAllInvestFundList, setGetAllInvestFundList] = useState([])
+    const [isGetAllInvestFund, setGetAllInvestFund] = useState([])
+
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isVisible, setIsVisible] = useState(false);
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const [isFilterTitle, setFilterTitle] = useState('Popular funds');
+
+    const handleErrorMsg = () => {
+        Animated.timing(
+            fadeAnim,
+            {
+                toValue: isVisible ? 0 : 1,
+                duration: 500,
+                useNativeDriver: true
+            }
+        ).start();
+        setTimeout(() => {
+            setErrorMessage('');
+        }, 3000);
+    };
 
     useEffect(() => {
         const fetchDataAsync = async () => {
@@ -50,12 +71,13 @@ const Invest = ({ navigation }) => {
             const transformedUserLoginData = JSON.parse(userDataAfterMPin);
             // console.log(transformedUserLoginData);
             setUser_id(transformedUserLoginData.user_id)
+            const userId = transformedUserLoginData.user_id;
             const resultAMCMaster = await AMCMasterApi();
             const resultSchemeMaster = await SchemeMasterApi();
             const resultFundDivOptionsApi = await FundDivOptionsApi();
-            const resultInvestFund = await GetAllInvestFundListApi();
+            const resultInvestFund = await GetAllInvestFundListApi(userId);
             setLoading(false)
-            // console.log('resultAMCMaster--->', resultAMCMaster.result);
+            console.log('resultAMCMaster--->', resultAMCMaster.result);
             // console.log('resultSchemeMaster--->', resultSchemeMaster.result);
             // console.log('resultFundDivOptionsApi--->', resultFundDivOptionsApi.result);
             // console.log('resultInvestFund--->', resultInvestFund.result.arrFunds);
@@ -78,6 +100,7 @@ const Invest = ({ navigation }) => {
             })
             setDataFundDivOptionsList(newArrayListFundDivOption)
             setGetAllInvestFundList(resultInvestFund.result.arrFunds)
+            setGetAllInvestFund(resultInvestFund.result.arrFunds)
         };
         fetchDataAsync();
     }, []);
@@ -113,7 +136,7 @@ const Invest = ({ navigation }) => {
                     />
                     <TouchableOpacity
                         style={{ marginTop: 10 }}
-                    // onPress={ClearAll}
+                        onPress={ClearAll}
                     >
                         <Text style={{ color: COLORS.brand.secondary, textAlign: 'right', fontFamily: FONT.PlusJakartaSansRegular, fontSize: SIZES.font }}>Clear all</Text>
                     </TouchableOpacity>
@@ -298,6 +321,34 @@ const Invest = ({ navigation }) => {
         )
     }
 
+    const ClearAll = () => {
+        setGetAllInvestFundList(isGetAllInvestFund)
+        setSearchData('');
+        setFilterTitle('Popular funds')
+        setValueAMCMaster(null)
+        setValueFundDivOptions(null)
+        setValueSchemeMaster(null)
+        return;
+    }
+
+    console.log(valueAMCMaster, valueSchemeMaster, valueFundDivOptions);
+
+    const getFilteredData = async () => {
+        // const filteredProducts = isGetAllInvestFundList.filter((item) => {
+        //     if (item.schname.toLowerCase().match(isSearchData) || item.fundgrowth.match(valueFundDivOptions) || item.schname.match(isSearchData) || item.amccode.match(valueAMCMaster) || item.fundclas.match(valueSchemeMaster)) {
+        //         return item;
+        //     }
+        // });
+        // console.log('filteredProducts--->', filteredProducts);
+        // setGetAllInvestFundList(filteredProducts)
+        // setLoading(true)
+        console.log(user_id);
+        const response = await GetAllInvestFundListFilterApi(user_id, valueAMCMaster);
+        // setLoading(false)
+        console.log('response--->', response);
+        setFilterTitle('Search result')
+    }
+
     if (isLoading) {
         return <ActivityIndicator size='small' color={COLORS.brand.primary} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
     }
@@ -308,6 +359,13 @@ const Invest = ({ navigation }) => {
                 barStyle='light-content'
                 backgroundColor={COLORS.brand.primary}
             />
+            {errorMessage !== '' && (
+                <Animated.View style={[styles.snackbar, {
+                    opacity: fadeAnim
+                }]}>
+                    <Text style={styles.snackbarText}>{errorMessage}</Text>
+                </Animated.View>
+            )}
             <View style={[styles.topSection]}>
                 <View style={{ height: 140, backgroundColor: COLORS.brand.primary, width: windowWidth, paddingHorizontal: 10, paddingVertical: 5 }}>
                     <BackBtnBlue
@@ -320,26 +378,22 @@ const Invest = ({ navigation }) => {
                         {searchSipBox()}
                         <TouchableOpacity
                             style={styles.secondaryBtn}
-                        // onPress={getFilteredData}
+                            onPress={getFilteredData}
                         >
                             <Text style={styles.secondaryBtnText}>Search</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={{ marginTop: 5, flex: 1 }}>
-
-                        {/* <Text>{JSON.stringify(isGetAllInvestFundList)}</Text> */}
-                        {/* {!isSearchData && } */}
-                        <Text style={{ fontSize: SIZES.medium, fontFamily: FONT.PlusJakartaSansSemiBold, color: COLORS.brand.black, marginBottom: 10 }}>Popular funds</Text>
+                        <Text style={{ fontSize: SIZES.medium, fontFamily: FONT.PlusJakartaSansSemiBold, color: COLORS.brand.black, marginBottom: 10 }}>{isFilterTitle}</Text>
                         {
-                            !isGetAllInvestFundList ?
+                            isGetAllInvestFundList.length === 0 ?
                                 <>
                                     <Text style={{ fontSize: SIZES.medium, textAlign: 'center', fontFamily: FONT.PlusJakartaSansSemiBold, color: COLORS.feedback.error, marginTop: 20 }}>No record fonund...!</Text>
                                 </>
                                 :
                                 <>{FundData()}</>
                         }
-                        {/* {FundData()} */}
                     </View>
                 </View>
 

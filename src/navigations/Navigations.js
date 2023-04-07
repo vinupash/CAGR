@@ -16,9 +16,9 @@ const Navigations = ({ }) => {
         }
     }
 
-    if (isLoading) {
-        return <ActivityIndicator size='small' color={COLORS.brand.primary} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
-    }
+    // if (isLoading) {
+    //     return <ActivityIndicator size='small' color={COLORS.brand.primary} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
+    // }
 
     return (
         <NavigationContainer theme={theme} independent={true}>
