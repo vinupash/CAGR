@@ -432,7 +432,7 @@ const Documents = ({ navigation, route }) => {
                         />
                     </View>
 
-                    <View style={{ marginTop: 20, marginBottom: profile_update == true ? 30 : 80 }}>
+                    <View style={{ marginTop: 20, marginBottom: 30 }}>
                         <SecondaryBtn
                             btnText='Upload'
                             // onPress={() => navigation.navigate('Registration Completed', { user_id: user_id, profile_update: profile_update })}

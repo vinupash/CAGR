@@ -347,7 +347,7 @@ const AddressDetails = ({ navigation, route }) => {
                             }}
                         />
                     </View>
-                    <View style={{ marginTop: 20, marginBottom: profile_update == true ? 30 : 80 }}>
+                    <View style={{ marginTop: 20, marginBottom: 30 }}>
                         <SecondaryBtn
                             btnText='Submit'
                             // onPress={() => navigation.navigate('Bank Details', { user_id: user_id, profile_update: profile_update })}

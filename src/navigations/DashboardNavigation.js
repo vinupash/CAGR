@@ -9,14 +9,14 @@ const DashboardStack = createNativeStackNavigator();
 const DashboardNavigation = () => {
     return (
         <DashboardStack.Navigator>
-            <DashboardStack.Screen
+            {/* <DashboardStack.Screen
                 name="Dashboard"
                 component={Dashboard}
                 options={{
                     headerShown: false,
                     animation: 'slide_from_right'
                 }}
-            />
+            /> */}
             <DashboardStack.Screen
                 name="InvestStack"
                 component={InvestStack}

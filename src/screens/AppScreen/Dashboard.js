@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, ScrollView, Dimensions, TextInput, TouchableOpacity, ActivityIndicator, Animated, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, ScrollView, Dimensions, TextInput, TouchableOpacity, ActivityIndicator, Animated, Image, Button, Pressable } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import MenuIcon from '../../../assets/images/MenuIcon';
 import DashboardContent from '../../components/DashboardContent';
@@ -73,22 +73,22 @@ const Dashboard = ({ navigation }) => {
         {
             key: '1',
             title: 'Invest',
-            screenName: 'InvestStack',
-            mainStackName: 'DashboardStack',
+            screenName: 'Invest',
+            mainStackName: 'InvestStack',
             iconName: Invest
         },
         {
             key: '2',
             title: 'Reedeem',
-            screenName: 'ReedeemStack',
-            mainStackName: 'DashboardStack',
+            screenName: 'Reedeem',
+            mainStackName: 'ReedeemStack',
             iconName: Reedeem
         },
         {
             key: '3',
             title: 'Switch',
-            screenName: 'SwitchStack',
-            mainStackName: 'DashboardStack',
+            screenName: 'Switch',
+            mainStackName: 'SwitchStack',
             iconName: Switch
         },
     ];
@@ -96,7 +96,7 @@ const Dashboard = ({ navigation }) => {
     const NavigationScreenData = () => {
         return boxNavigationArray.map((NavigationInfoData, i) => {
             return (
-                <TouchableOpacity
+                <Pressable
                     style={styles.navigationBox}
                     key={NavigationInfoData.key}
                     // onPress={() => { navigation.navigate(NavigationInfoData.screenName) }}
@@ -104,7 +104,7 @@ const Dashboard = ({ navigation }) => {
                 >
                     <SvgXml xml={NavigationInfoData.iconName} width={40} height={40} />
                     <Text style={styles.navigationTitle}>{NavigationInfoData.title}</Text>
-                </TouchableOpacity>
+                </Pressable>
             )
         })
     }
@@ -159,7 +159,7 @@ const Dashboard = ({ navigation }) => {
                 />)}
 
             {/* <UserRegistrationDetail
-                onPress={() => navigation.navigate('ProfileUpdate', {
+                onPress={() => navigation.navigate('ProfileUpdateNavigation', {
                     screen: 'Address Details',
                     params: {
                         user_id: user_id,

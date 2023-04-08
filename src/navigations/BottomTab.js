@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 const BottomTab = () => {
     return (
         <Tab.Navigator
-            initialRouteName='DashboardStack'
+            initialRouteName='Dashboard'
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
@@ -28,14 +28,14 @@ const BottomTab = () => {
             }}
         >
             <Tab.Screen
-                name="DashboardStack"
-                component={DashboardStack}
+                name="Dashboard"
+                component={Dashboard}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: "center" }}>
-                            {focused ? <SvgXml xml={HomeActive} width={20} height={20} /> : <SvgXml xml={HomeActive} width={20} height={20} />}
+                            {focused ? <SvgXml xml={HomeActive} width={20} height={20} /> : <SvgXml xml={Home} width={20} height={20} />}
                             <Text style={{
-                                color: focused ? '#F5F6F9' : '#F5F6F9',
+                                color: focused ? '#F5F6F9' : COLORS.neutrals.thunder,
                                 marginTop: 2,
                                 fontFamily: FONT.PlusJakartaSansRegular,
                                 fontSize: SIZES.base
@@ -51,9 +51,9 @@ const BottomTab = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: "center" }}>
-                            {focused ? <SvgXml xml={ShoppingBagActive} width={20} height={20} /> : <SvgXml xml={ShoppingBagActive} width={20} height={20} />}
+                            {focused ? <SvgXml xml={ShoppingBagActive} width={20} height={20} /> : <SvgXml xml={ShoppingBag} width={20} height={20} />}
                             <Text style={{
-                                color: focused ? '#F5F6F9' : '#F5F6F9',
+                                color: focused ? '#F5F6F9' : COLORS.neutrals.thunder,
                                 marginTop: 2,
                                 fontFamily: FONT.PlusJakartaSansRegular,
                                 fontSize: SIZES.base
