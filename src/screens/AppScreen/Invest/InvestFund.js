@@ -1186,7 +1186,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.brand.background
     },
     bottomSection: {
-        flex: 2,
+        flex: 0.8,
         justifyContent: 'center',
         // paddingHorizontal: 20,
         alignSelf: 'center',

@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.brand.background,
     },
     bottomSectionPage: {
-        flex: 2,
+        flex: 0.8,
         justifyContent: 'center',
     },
     topSection: {
